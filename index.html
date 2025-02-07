@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Миксер вкусов для кальяна</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input {
+            padding: 8px;
+            margin: 10px 0;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 8px;
+            margin: 4px 0;
+            background-color: #f8f8f8;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Миксер вкусов для кальяна</h1>
+        <div>
+            <label for="flavors">Введите вкусы через запятую:</label><br>
+            <input type="text" id="flavors" placeholder="Например: яблоко, мята, виноград"><br>
+            <button onclick="generateMixes()">Сгенерировать миксы</button>
+        </div>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function generateMixes() {
+            const flavorsInput = document.getElementById('flavors').value;
+            const flavors = flavorsInput.split(',').map(f => f.trim()).filter(f => f);
+            const result = document.getElementById('result');
+            
+            if (flavors.length === 0) {
+                result.innerHTML = '<p style="color: red;">Пожалуйста, введите хотя бы один вкус</p>';
+                return;
+            }
+            
+            const allMixes = [];
+            
+            function generateMixesRecursive(currentMix, start) {
+                if (currentMix.length > 0) {
+                    allMixes.push([...currentMix]);
+                }
+                
+                for (let i = start; i < flavors.length; i++) {
+                    currentMix.push(flavors[i]);
+                    generateMixesRecursive(currentMix, i + 1);
+                    currentMix.pop();
+                }
+            }
+            
+            generateMixesRecursive([], 0);
+            
+            result.innerHTML = '<h2>Возможные миксы:</h2><ul>' + 
+                allMixes.map(mix => '<li>' + mix.join(' + ') + '</li>').join('') +
+                '</ul>';
+        }
+    </script>
+</body>
+</html>
